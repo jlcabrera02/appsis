@@ -1,6 +1,9 @@
 import { Navbar } from "react-bootstrap";
 import Container from "react-bootstrap/esm/Container";
 import { NavLink, Outlet } from "react-router-dom";
+import { Dropdown, DropdownButton } from "react-bootstrap";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
+import { token } from "../utils/axios";
 
 export const HeaderLogin = () => {
   return (
@@ -29,12 +32,47 @@ export const Header = () => {
   return (
     <div className="d-flex flex-column h-screen">
       <Navbar bg="primary" className="text-white mb-3">
-        <div className="container">
+        <div className="container position-relative">
           <div className="row m-auto">
-            <div className="col-12">
+            <div className="col-12 ">
               <h1 className="m-auto text-center">
                 Instituto Tecnologico Superior de los Rios
               </h1>
+              <div
+                className="position-absolute"
+                style={{ top: "5px", right: "5px" }}
+              >
+                <Dropdown>
+                  <DropdownButton
+                    drop="start"
+                    title={<i className="fa-regular fa-user" />}
+                    variant="me-2 d-flex"
+                    id="dropdown-menu-align-center  "
+                  >
+                    <div className="d-flex flex-column justify-content-center align-items-center"></div>
+                    {token ? (
+                      <DropdownItem
+                        onClick={() => {
+                          localStorage.removeItem("user");
+                          window.location.href = "/";
+                        }}
+                        className="fw-semibold text-delete"
+                      >
+                        Cerrar sesion
+                      </DropdownItem>
+                    ) : (
+                      <DropdownItem
+                        onClick={() => {
+                          window.location.href = "/login";
+                        }}
+                        className="fw-semibold text-primary"
+                      >
+                        Iniciar Sesión
+                      </DropdownItem>
+                    )}
+                  </DropdownButton>
+                </Dropdown>
+              </div>
             </div>
             <div
               className="col-12 d-flex justify-content-around mt-3"

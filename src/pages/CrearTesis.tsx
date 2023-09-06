@@ -1,10 +1,15 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { InputSelectCarrerasOrCreate } from "../components/InputSelectCarreras";
 import { InputSelectCategoriasOrCreate } from "../components/InputSelectCategorias";
 import axios from "../utils/axios";
 import { Form } from "react-bootstrap";
-import { formatTextoMayusPrimeraLetra } from "../utils/formats";
 import { Correct, Error } from "../components/Modals";
+import { InputSelecOpcionesOrCreate } from "../components/InputSelectOpciones";
+import {
+  InputSelectEstados,
+  InputSelectMunicipio,
+} from "../components/InputSelectEstados";
 
 const objectAutor = {
   nombre: "",
@@ -15,20 +20,26 @@ const objectAutor = {
 };
 
 const initialData = {
+  id: "",
   titulo: "",
+  adquisicion: "",
+  ficha: "",
   resumen: "",
-  autor: objectAutor,
-  coautor: null,
+  autores: [objectAutor],
   institucion: "",
   carrera: "",
   categoria: "",
+  opcion: "",
+  fecha: "",
+  municipio: "",
+  estado: "",
 };
 
-export const CrearTesis = () => {
+export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
   const [file, setFile] = useState(null);
   const [modalOk, setModalOk] = useState(false);
   const [modalErr, setModalErr] = useState(false);
-  const [tesisBody, setTesisBody]: [any, any] = useState(initialData);
+  const [tesisBody, setTesisBody]: [any, any] = useState(data || initialData);
 
   const handle = (e: any) => {
     setTesisBody({ ...tesisBody, [e.target.name]: e.target.value });
@@ -38,8 +49,25 @@ export const CrearTesis = () => {
     setFile(e.target.files[0]);
   };
 
+  const editarTesis = async () => {
+    try {
+      await axios.put("/tesis/editar/".concat(tesisBody.id), tesisBody);
+
+      setTesisBody(initialData);
+      setFile(null);
+      setModalOk(true);
+      setTimeout(() => {
+        setModalOk(false);
+      }, 600);
+      setDataEdit("");
+      actualizador();
+    } catch (err) {
+      setModalErr(true);
+      console.log(err);
+    }
+  };
+
   const guardarTesis = async (e: any) => {
-    e.preventDefault();
     try {
       const newData = new FormData();
 
@@ -59,32 +87,83 @@ export const CrearTesis = () => {
       setTimeout(() => {
         setModalOk(false);
       }, 600);
+      e.target.reset();
     } catch (err) {
       setModalErr(true);
       console.log(err);
     }
   };
 
+  const enviarForm = async (e: any) => {
+    e.preventDefault();
+    if (tesisBody.id) {
+      await editarTesis();
+    } else {
+      await guardarTesis(e);
+    }
+  };
+
   return (
     <>
       <div className="container mb-4">
-        <Form onSubmit={guardarTesis}>
-          {/* <form className="needs-validation" noValidate onSubmit={}> */}
+        <div className="mb-3 d-flex justify-content-end gap-2">
+          <Link to="/alumnos" className="btn btn-secondary">
+            <i className="fa-solid fa-graduation-cap" /> Alumnos
+          </Link>
+          <Link to="/carreras" className="btn btn-secondary">
+            <i className="fa-solid fa-chalkboard-user" /> Carreras
+          </Link>
+          <Link to="/categorias" className="btn btn-secondary">
+            <i className="fa-solid fa-chart-simple" /> Categorias
+          </Link>
+          <Link to="/opciones" className="btn btn-secondary">
+            {" "}
+            <i className="fa-solid fa-list" /> Opciones
+          </Link>
+        </div>
+        <Form onSubmit={enviarForm}>
           <div>
             <h4 className="fw-bold">Datos de la tesis</h4>
           </div>
-          <div className="mb-3">
-            <label className="form-label fw-bold">Titulo de la tesis</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Titulo..."
-              name="titulo"
-              onChange={handle}
-              value={tesisBody.titulo}
-              required
-            />
+          <div className="mb-3 d-flex gap-2">
+            <div className="">
+              <label className="form-label fw-bold">Ficha</label>
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Ficha..."
+                name="ficha"
+                onChange={handle}
+                value={tesisBody.ficha}
+                required
+              />
+            </div>
+            <div className="">
+              <label className="form-label fw-bold">Adquisición</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="adquisicion..."
+                name="adquisicion"
+                onChange={handle}
+                value={tesisBody.adquisicion}
+                required
+              />
+            </div>
+            <div className="flex-grow-1">
+              <label className="form-label fw-bold">Titulo de la tesis</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Titulo..."
+                name="titulo"
+                onChange={handle}
+                value={tesisBody.titulo}
+                required
+              />
+            </div>
           </div>
+
           <div className="mb-3">
             <label className="form-label fw-bold">Resumen</label>
             <textarea
@@ -111,6 +190,15 @@ export const CrearTesis = () => {
               />
             </div>
             <div className="flex-grow-1">
+              <label className="form-label fw-bold">Opción</label>
+              <InputSelecOpcionesOrCreate
+                name="opcion"
+                placeholder="opcion..."
+                value={tesisBody}
+                handle={handle}
+              />
+            </div>
+            <div className="flex-grow-1">
               <label className="form-label fw-bold">Carrera</label>
               <InputSelectCarrerasOrCreate
                 name="carrera"
@@ -128,58 +216,91 @@ export const CrearTesis = () => {
                 handle={handle}
               />
             </div>
+          </div>
+          <div className="d-flex justify-content-between gap-2">
             <div className="flex-grow-1">
-              <label className="form-label fw-bold" htmlFor="pdfFile">
-                Subir archivo
-              </label>
+              <label className="form-label fw-bold">Fecha</label>
               <input
-                type="file"
+                type="date"
                 className="form-control"
-                id="pdfFile"
-                accept=".pdf"
-                onChange={uploadFile}
-                required
+                name="fecha"
+                value={tesisBody.fecha}
+                onChange={handle}
               />
             </div>
+            <div className="flex-grow-1">
+              <label className="form-label fw-bold">Estado</label>
+              <InputSelectEstados
+                name="estado"
+                handle={handle}
+                value={tesisBody}
+              />
+            </div>
+
+            <div className="flex-grow-1">
+              <label className="form-label fw-bold">Municipio</label>
+              <InputSelectMunicipio
+                name="municipio"
+                handle={handle}
+                value={tesisBody}
+                estado={tesisBody.estado.estado}
+              />
+            </div>
+            {!tesisBody.id && (
+              <div className="flex-grow-1">
+                <label className="form-label fw-bold" htmlFor="pdfFile">
+                  Subir archivo
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="pdfFile"
+                  accept=".pdf"
+                  onChange={uploadFile}
+                  required
+                />
+              </div>
+            )}
           </div>
           <hr className="border border-secondary" />
           <div>
             <h4 className="fw-bold">Datos de los autores</h4>
           </div>
-          <FormAutor
-            tesisBodyState={[tesisBody, setTesisBody]}
-            property="autor"
-          />
-          {!tesisBody.coautor && (
+          {tesisBody.autores.map((autor: any, index: number) => (
+            <FormAutor
+              key={index}
+              // autor={autor}
+              tesisBodyState={[tesisBody, setTesisBody]}
+              property="autores"
+              index={index}
+            />
+          ))}
+
+          {tesisBody.autores.length < 4 && (
             <button
-              className="btn btn-secondary"
-              onClick={() =>
-                setTesisBody({ ...tesisBody, coautor: objectAutor })
-              }
+              className="btn btn-silver"
               type="button"
+              onClick={() =>
+                setTesisBody({
+                  ...tesisBody,
+                  autores: [...tesisBody.autores, objectAutor],
+                })
+              }
             >
-              Añadir coautor
+              Agregar autor
             </button>
           )}
-          {tesisBody.coautor && (
-            <>
-              <FormAutor
-                tesisBodyState={[tesisBody, setTesisBody]}
-                property="coautor"
-              />
-              <button
-                className="btn btn-danger"
-                onClick={() => setTesisBody({ ...tesisBody, coautor: null })}
-                type="button"
-              >
-                Eliminar coautor
-              </button>
-            </>
-          )}
+
           <div className="d-flex">
-            <button className="btn btn-primary m-auto w-25" type="submit">
-              Guardar tesis
-            </button>
+            {!tesisBody.id ? (
+              <button className="btn btn-primary m-auto w-25" type="submit">
+                Guardar tesis
+              </button>
+            ) : (
+              <button className="btn btn-secondary m-auto w-25" type="submit">
+                Editar tesis
+              </button>
+            )}
           </div>
         </Form>
       </div>
@@ -192,23 +313,30 @@ export const CrearTesis = () => {
 interface propsAutor {
   tesisBodyState: any;
   property: string;
+  index: number;
 }
 
-const FormAutor = ({ tesisBodyState, property }: propsAutor) => {
+const FormAutor = ({ tesisBodyState, property, index }: propsAutor) => {
   const [tesisBody, setTesisBody] = tesisBodyState;
   const handle = (e: any) => {
     setTesisBody({
       ...tesisBody,
-      [property]: { ...tesisBody[property], [e.target.name]: e.target.value },
+      autores: tesisBody.autores.toSpliced(index, 1, {
+        ...tesisBody.autores[index],
+        [e.target.name]: e.target.value,
+      }),
     });
+  };
+
+  const eliminar = () => {
+    const autores = tesisBody.autores.toSpliced(index, 1);
+    setTesisBody({ ...tesisBody, autores });
   };
 
   return (
     <div className="mb-3">
       <div className="bg-primary bg-opacity-25 rounded mb-2">
-        <span className="text-white fs-5">
-          {formatTextoMayusPrimeraLetra(property)}
-        </span>
+        <span className="text-white fs-5">Autor {index + 1}</span>
       </div>
       <div className="d-flex gap-2 justify-content-between">
         <div>
@@ -219,7 +347,7 @@ const FormAutor = ({ tesisBodyState, property }: propsAutor) => {
             placeholder="Matricula..."
             onChange={handle}
             name="matricula"
-            value={tesisBody[property].matricula}
+            value={tesisBody[property][index].matricula}
           />
         </div>
         <div>
@@ -230,7 +358,7 @@ const FormAutor = ({ tesisBodyState, property }: propsAutor) => {
             placeholder="Nombre..."
             onChange={handle}
             name="nombre"
-            value={tesisBody[property].nombre}
+            value={tesisBody[property][index].nombre}
           />
         </div>
         <div>
@@ -241,7 +369,7 @@ const FormAutor = ({ tesisBodyState, property }: propsAutor) => {
             placeholder="Apellido..."
             onChange={handle}
             name="apepat"
-            value={tesisBody[property].apepat}
+            value={tesisBody[property][index].apepat}
           />
         </div>
         <div>
@@ -251,7 +379,7 @@ const FormAutor = ({ tesisBodyState, property }: propsAutor) => {
             className="form-control"
             name="apemat"
             onChange={handle}
-            value={tesisBody[property].apemat}
+            value={tesisBody[property][index].apemat}
             placeholder="Apellido..."
           />
         </div>
@@ -260,9 +388,14 @@ const FormAutor = ({ tesisBodyState, property }: propsAutor) => {
           <InputSelectCarrerasOrCreate
             name="carrera"
             placeholder="Carrera..."
-            value={tesisBody[property]}
+            value={tesisBody[property][index]}
             handle={handle}
           />
+        </div>
+        <div className="d-flex align-items-end">
+          <button className="btn btn-delete" type="button" onClick={eliminar}>
+            <i className="fa-solid fa-trash" />
+          </button>
         </div>
       </div>
     </div>

@@ -67,7 +67,7 @@ export const TableShowTesis = ({ filtros }: Props) => {
       },
     },
     {
-      name: "Autor",
+      name: "Autor(es)",
       selector: (row: any) => row.autor,
       center: true,
       hide: 599,
@@ -112,12 +112,12 @@ export const TableShowTesis = ({ filtros }: Props) => {
   ];
 
   const rows = res["rows"].map(
-    ({ id, titulo, Alumno, Carrera, institucion, createdAt }) => ({
+    ({ id, titulo, autores, Carrera, institucion, createdAt }: any) => ({
       titulo,
       createdAt,
       institucion,
       carrera: Carrera["carrera"],
-      autor: `${Alumno["nombre"]} ${Alumno["apepat"]} ${Alumno["apemat"]}`,
+      autor: autores.map((autor: any) => autor.nombre).join(","),
       endpoint: `/tesis/${id}`,
     })
   );

@@ -4,7 +4,7 @@ import useGetData from "../hooks/useGetData";
 import Select from "react-select";
 // import axios from "../utils/axios";
 
-export const InputSelectCategoriasOrCreate = ({
+export const InputSelecOpcionesOrCreate = ({
   name,
   placeholder,
   handle,
@@ -17,26 +17,17 @@ export const InputSelectCategoriasOrCreate = ({
 }) => {
   const [updateOptions] = useState(false);
   const { data, isPending } = useGetData({
-    baseUrl: "categorias/obtener",
+    baseUrl: "opciones/obtener",
     actualizador: updateOptions,
   });
-  const categorias = data ? data["response"] : [];
+  const opciones = data ? data["response"] : [];
 
-  const options = categorias.map((categoria) => ({
-    label: categoria["categoria"],
-    categoria: categoria["categoria"],
-    id: categoria["id"],
-    value: categoria["id"],
+  const options = opciones.map((opcion) => ({
+    label: opcion["opcion"],
+    opcion: opcion["opcion"],
+    id: opcion["id"],
+    value: opcion["id"],
   }));
-
-  /*   const handleCreate = async (categoria: string) => {
-    try {
-      await axios.post("/categorias/crear", { categoria });
-      setUpdateOptions(!updateOptions);
-    } catch (err) {
-      console.log(err);
-    }
-  }; */
 
   const change = (e: object) => {
     handle({ target: { name, value: e } });
@@ -46,16 +37,9 @@ export const InputSelectCategoriasOrCreate = ({
     <div style={{ minWidth: "200px" }}>
       <Select
         placeholder={placeholder}
-        /*  formatCreateLabel={(newOption) => (
-          <span>
-            <span className="fw-bold">Crear: </span>
-            <span className="bg-secondary rounded px-1">{newOption}</span>
-          </span>
-        )} */
         options={options}
         isLoading={isPending}
         name={name}
-        // onCreateOption={handleCreate}
         value={value[name] || []}
         onChange={change}
         isDisabled={isPending}

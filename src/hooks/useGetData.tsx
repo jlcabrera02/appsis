@@ -22,10 +22,6 @@ const useGetData = (props: Props) => {
         setRequest(res.data);
       })
       .catch((err) => {
-        // if (err && err.response.status === 403) {
-        //   localStorage.removeItem("user");
-        //   throw redirect("/sd");
-        // }
         setError(err);
       })
       .finally(() => setIsPending(false));

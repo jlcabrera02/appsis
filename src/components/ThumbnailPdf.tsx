@@ -35,8 +35,10 @@ const pageThumbnailPlugin = (props: PageThumbnailPluginProps): Plugin => {
 const ThumbnailPdf = ({ urlPdf }: PropsComponent) => {
   const thumbnailPluginInstance = thumbnailPlugin({
     renderSpinner: () => (
-      <div className="spinner-border w-50px h-50px text-primary">
-        <span className="sr-only">Cargando</span>
+      <div className="h-250px w-250px d-flex">
+        <div className="m-auto spinner-border w-50px h-50px text-primary">
+          <span className="sr-only">Cargando</span>
+        </div>
       </div>
     ),
   });

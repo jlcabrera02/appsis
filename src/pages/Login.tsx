@@ -2,10 +2,8 @@ import axios from "../utils/axios";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/esm/Container";
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate();
   const login = async (e: any) => {
     try {
       e.preventDefault();
@@ -14,8 +12,8 @@ const Login = () => {
         password: e.target.password.value,
       };
       const response = await axios.post("/users/login/", body);
-      //localStorage.setItem("user", JSON.stringify(response.data.response));
-      navigate("/");
+      localStorage.setItem("user", JSON.stringify(response.data.response));
+      window.location.href = "/";
       console.log(response);
     } catch (err) {
       console.log(err);

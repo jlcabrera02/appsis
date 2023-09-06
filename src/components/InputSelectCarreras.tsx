@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Select from "react-select";
 import useGetData from "../hooks/useGetData";
-import CreatableSelect from "react-select/creatable";
-import axios from "../utils/axios";
+// import CreatableSelect from "react-select/creatable";
+// import axios from "../utils/axios";
 
 const InputSelectCarreras = ({ name }: { name: string }) => {
   const { data, isPending } = useGetData({ baseUrl: "carreras/obtener" });
@@ -49,7 +49,7 @@ export const InputSelectCarrerasOrCreate = ({
   handle: (event: any) => void;
   value: any;
 }) => {
-  const [updateOptions, setUpdateOptions] = useState(false);
+  const [updateOptions] = useState(false);
   const { data, isPending } = useGetData({
     baseUrl: "carreras/obtener",
     actualizador: updateOptions,
@@ -63,7 +63,7 @@ export const InputSelectCarrerasOrCreate = ({
     value: carrera["id"],
   }));
 
-  const handleCreate = async (carrera: string) => {
+  /*   const handleCreate = async (carrera: string) => {
     try {
       await axios.post("/carreras/crear", { carrera });
       setUpdateOptions(!updateOptions);
@@ -71,25 +71,25 @@ export const InputSelectCarrerasOrCreate = ({
       console.log(err);
     }
   };
-
+ */
   const change = (e: object) => {
     handle({ target: { name, value: e } });
   };
 
   return (
     <div style={{ minWidth: "200px" }}>
-      <CreatableSelect
+      <Select
         placeholder={placeholder}
-        formatCreateLabel={(newOption) => (
+        /*  formatCreateLabel={(newOption) => (
           <span>
             <span className="fw-bold">Crear: </span>
             <span className="bg-secondary rounded px-1">{newOption}</span>
           </span>
-        )}
+        )} */
         options={options}
         isLoading={isPending}
         name={name}
-        onCreateOption={handleCreate}
+        // onCreateOption={handleCreate}
         value={value[name] || []}
         onChange={change}
         isDisabled={isPending}

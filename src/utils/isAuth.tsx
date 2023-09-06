@@ -13,7 +13,7 @@ export const isAuth = () => {
 export const noAuth = () => {
   const token = localStorage.getItem("user") || null;
   if (!token) {
-    throw redirect("/");
+    throw redirect("/login");
   }
   return "";
 };
