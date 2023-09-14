@@ -15,6 +15,8 @@ import {
   ModalConfirmDelTesis,
 } from "../components/Modals";
 import { token } from "../utils/axios";
+import BtnBack from "../assets/BtnBack";
+import Loader from "../assets/Loader";
 
 const Tesis = () => {
   const [dataEdit, setDataEdit] = useState("");
@@ -27,10 +29,11 @@ const Tesis = () => {
   });
   const [actualizador, setActualizador] = useState(false);
   const { idtesis } = useParams();
-  const { data, isPending }: any = useGetData({
+  const { data, isPending, error }: any = useGetData({
     baseUrl: `/tesis/obtener/${idtesis}`,
     actualizador,
   });
+
   const res = data ? data.response : {};
 
   const actualizadorF = () => setActualizador(!actualizador);
@@ -88,8 +91,12 @@ const Tesis = () => {
   };
 
   return (
-    <div className="container mb-3">
-      {token && (
+    <div className="container my-3">
+      {isPending && <Loader className="" />}
+      {error && !isPending && !data && (
+        <h3 className="text-danger text-center">No se encontro la tesis</h3>
+      )}
+      {data && token && (
         <div className="d-flex justify-content-center mb-2">
           <div className="d-flex gap-2 justify-content-end flex-grow-1">
             {!dataEdit ? (
@@ -250,6 +257,9 @@ const Tesis = () => {
           </div>
         </>
       )}
+
+      <BtnBack to="/tesis" />
+
       {dataEdit && (
         <CrearTesis
           data={dataEdit}

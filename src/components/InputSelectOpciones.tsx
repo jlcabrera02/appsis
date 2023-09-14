@@ -4,6 +4,40 @@ import useGetData from "../hooks/useGetData";
 import Select from "react-select";
 // import axios from "../utils/axios";
 
+const InputSelectOpciones = ({ name }: { name: string }) => {
+  const { data, isPending } = useGetData({ baseUrl: "opciones/obtener" });
+  const carreras = data ? data["response"] : [];
+
+  const options = carreras.map((opcion) => ({
+    label: opcion["opcion"],
+    id: opcion["id"],
+    value: opcion["id"],
+  }));
+
+  return (
+    <Select
+      options={options}
+      isClearable
+      name={name}
+      placeholder="Seleciona una opción"
+      isLoading={isPending}
+      className="w-100"
+      theme={(theme) => ({
+        ...theme,
+        colors: {
+          ...theme.colors,
+          primary: "#1b396b",
+          neutral20: "#1b396b",
+        },
+        spacing: {
+          ...theme.spacing,
+          controlHeight: 50,
+        },
+      })}
+    />
+  );
+};
+
 export const InputSelecOpcionesOrCreate = ({
   name,
   placeholder,
@@ -48,3 +82,5 @@ export const InputSelecOpcionesOrCreate = ({
     </div>
   );
 };
+
+export default InputSelectOpciones;

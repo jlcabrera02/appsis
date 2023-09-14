@@ -3,7 +3,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { Header, HeaderLogin } from "../layouts/Headers";
+import { Header } from "../layouts/Headers";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import { isAuth, noAuth } from "../utils/isAuth";
@@ -18,30 +18,36 @@ import { ModificarAlumnos } from "../pages/ModificarAlumnos";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route element={<HeaderLogin />}>
+      <Route element={<Header />}>
         <Route loader={isAuth} path="login" index element={<Login />} />
       </Route>
       <Route element={<Header />}>
         <Route index element={<Home />} />
         <Route path="tesis" element={<BuscarTesis />} />
-        <Route
-          path="carreras"
-          element={<ModificarCarreras />}
-          loader={noAuth}
-        />
-        <Route path="alumnos" element={<ModificarAlumnos />} loader={noAuth} />
-        <Route
-          path="categorias"
-          element={<ModificarCategorias />}
-          loader={noAuth}
-        />
-        <Route
-          path="opciones"
-          element={<ModificarOpciones />}
-          loader={noAuth}
-        />
+        <Route path="admin">
+          <Route
+            path="administrar-carreras"
+            element={<ModificarCarreras />}
+            loader={noAuth}
+          />
+          <Route
+            path="administrar-alumnos"
+            element={<ModificarAlumnos />}
+            loader={noAuth}
+          />
+          <Route
+            path="administrar-categorias"
+            element={<ModificarCategorias />}
+            loader={noAuth}
+          />
+          <Route
+            path="administrar-opciones"
+            element={<ModificarOpciones />}
+            loader={noAuth}
+          />
+          <Route path="crear-tesis" element={<CrearTesis />} loader={noAuth} />
+        </Route>
         <Route path="tesis/:idtesis" element={<Tesis />} />
-        <Route path="crear/tesis" element={<CrearTesis />} loader={noAuth} />
       </Route>
     </Route>
   )

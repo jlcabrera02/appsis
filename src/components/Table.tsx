@@ -26,7 +26,7 @@ const opcionesPaginacion = {
 
 interface Filtros {
   titulo?: string;
-  carrera?: string;
+  idcarrera?: string;
 }
 
 interface Props {
@@ -38,7 +38,7 @@ export const TableShowTesis = ({ filtros }: Props) => {
   const { data, isPending } = useGetData({
     baseUrl: `tesis/obtener?limit=${pagination.limit}&offset=${
       pagination.offset
-    }&titulo=${filtros?.titulo ?? ""}&carrera=${filtros?.carrera ?? ""}`,
+    }&titulo=${filtros?.titulo ?? ""}&idcarrera=${filtros?.idcarrera ?? ""}`,
   });
   const res = data ? data["response"] : { count: 0, rows: [] };
 

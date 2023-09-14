@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { InputSelectCarrerasOrCreate } from "../components/InputSelectCarreras";
 import { InputSelectCategoriasOrCreate } from "../components/InputSelectCategorias";
 import axios from "../utils/axios";
@@ -10,6 +9,7 @@ import {
   InputSelectEstados,
   InputSelectMunicipio,
 } from "../components/InputSelectEstados";
+import Loader from "../assets/Loader";
 
 const objectAutor = {
   nombre: "",
@@ -36,6 +36,7 @@ const initialData = {
 };
 
 export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
+  const [pending, setPending] = useState(false);
   const [file, setFile] = useState(null);
   const [modalOk, setModalOk] = useState(false);
   const [modalErr, setModalErr] = useState(false);
@@ -95,32 +96,19 @@ export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
   };
 
   const enviarForm = async (e: any) => {
+    setPending(true);
     e.preventDefault();
     if (tesisBody.id) {
       await editarTesis();
     } else {
       await guardarTesis(e);
     }
+    setPending(false);
   };
 
   return (
     <>
-      <div className="container mb-4">
-        <div className="mb-3 d-flex justify-content-end gap-2">
-          <Link to="/alumnos" className="btn btn-secondary">
-            <i className="fa-solid fa-graduation-cap" /> Alumnos
-          </Link>
-          <Link to="/carreras" className="btn btn-secondary">
-            <i className="fa-solid fa-chalkboard-user" /> Carreras
-          </Link>
-          <Link to="/categorias" className="btn btn-secondary">
-            <i className="fa-solid fa-chart-simple" /> Categorias
-          </Link>
-          <Link to="/opciones" className="btn btn-secondary">
-            {" "}
-            <i className="fa-solid fa-list" /> Opciones
-          </Link>
-        </div>
+      <div className="container mt-4">
         <Form onSubmit={enviarForm}>
           <div>
             <h4 className="fw-bold">Datos de la tesis</h4>
@@ -293,12 +281,20 @@ export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
 
           <div className="d-flex">
             {!tesisBody.id ? (
-              <button className="btn btn-primary m-auto w-25" type="submit">
-                Guardar tesis
+              <button
+                className="btn btn-primary m-auto w-25"
+                type="submit"
+                disabled={pending}
+              >
+                {pending ? <Loader /> : "Guardar tesis"}
               </button>
             ) : (
-              <button className="btn btn-secondary m-auto w-25" type="submit">
-                Editar tesis
+              <button
+                className="btn btn-secondary m-auto w-25"
+                type="submit"
+                disabled={pending}
+              >
+                {pending ? <Loader /> : "Editar tesis"}
               </button>
             )}
           </div>

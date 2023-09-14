@@ -2,6 +2,8 @@ import axios from "../utils/axios";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Loader from "../assets/Loader";
 
 export function Correct(props: any) {
   return (
@@ -63,9 +65,11 @@ export function ModalViewPdf(props: any) {
 }
 
 export function ModalEditTesisPDF(props: any) {
+  const [pending, setPending] = useState(false);
   const [statusM, setStatusM] = props.modalstatus;
   const actualizarPDF = async (e: any) => {
     e.preventDefault();
+    setPending(true);
     try {
       const formdata = new FormData();
 
@@ -80,6 +84,7 @@ export function ModalEditTesisPDF(props: any) {
       setStatusM({ ...statusM, false: true });
     }
     props.onHide();
+    setPending(false);
   };
 
   return (
@@ -110,7 +115,9 @@ export function ModalEditTesisPDF(props: any) {
               />
             </div>
             <div className="d-flex align-items-end">
-              <button className="btn btn-edit">Actualizar</button>
+              <button className="btn btn-edit" disabled={pending}>
+                {pending ? <Loader /> : "Actualizar"}
+              </button>
             </div>
           </form>
         </div>
@@ -125,8 +132,10 @@ export function ModalEditTesisPDF(props: any) {
 }
 
 export function ModalEditAvatar(props: any) {
+  const [pending, setPending] = useState(false);
   const [statusM, setStatusM] = props.modalstatus;
   const actualizarPerfil = async (e: any) => {
+    setPending(true);
     e.preventDefault();
     try {
       const formdata = new FormData();
@@ -146,6 +155,7 @@ export function ModalEditAvatar(props: any) {
       setStatusM({ ...statusM, false: true });
     }
     props.onHide();
+    setPending(false);
   };
 
   return (
@@ -174,7 +184,9 @@ export function ModalEditAvatar(props: any) {
               />
             </div>
             <div className="d-flex align-items-end">
-              <button className="btn btn-edit">guardar</button>
+              <button className="btn btn-edit" disabled={pending}>
+                {pending ? <Loader /> : "Guardar"}
+              </button>
             </div>
           </form>
         </div>
@@ -189,9 +201,11 @@ export function ModalEditAvatar(props: any) {
 }
 
 export function ModalConfirmDelTesis(props: any) {
+  const [pending, setPending] = useState(false);
   const [statusM, setStatusM] = props.modalstatus;
   const navigate = useNavigate();
   const eliminar = async (e: any) => {
+    setPending(true);
     e.preventDefault();
     try {
       await axios.delete(`/tesis/eliminar/${props.idtesis}`);
@@ -201,6 +215,7 @@ export function ModalConfirmDelTesis(props: any) {
       setStatusM({ ...statusM, false: true });
     }
     props.onHide();
+    setPending(false);
   };
 
   return (
@@ -222,7 +237,7 @@ export function ModalConfirmDelTesis(props: any) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={eliminar} variant="danger">
-          Si, estoy seguro
+          {pending ? <Loader /> : "Si, estoy seguro"}
         </Button>
         <Button onClick={props.onHide} variant="secondary">
           Cancelar
@@ -233,8 +248,6 @@ export function ModalConfirmDelTesis(props: any) {
 }
 
 export function ModalConfirmDelElement(props: any) {
-  console.log(props);
-
   const eliminar = () => props.eliminarF(props.id);
 
   return (

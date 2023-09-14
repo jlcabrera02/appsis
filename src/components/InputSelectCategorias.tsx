@@ -4,6 +4,40 @@ import useGetData from "../hooks/useGetData";
 import Select from "react-select";
 // import axios from "../utils/axios";
 
+const InputSelectCategorias = ({ name }: { name: string }) => {
+  const { data, isPending } = useGetData({ baseUrl: "categorias/obtener" });
+  const carreras = data ? data["response"] : [];
+
+  const options = carreras.map((categoria) => ({
+    label: categoria["categoria"],
+    id: categoria["id"],
+    value: categoria["id"],
+  }));
+
+  return (
+    <Select
+      options={options}
+      isClearable
+      name={name}
+      placeholder="Seleciona una categoria"
+      isLoading={isPending}
+      className="w-100"
+      theme={(theme) => ({
+        ...theme,
+        colors: {
+          ...theme.colors,
+          primary: "#1b396b",
+          neutral20: "#1b396b",
+        },
+        spacing: {
+          ...theme.spacing,
+          controlHeight: 50,
+        },
+      })}
+    />
+  );
+};
+
 export const InputSelectCategoriasOrCreate = ({
   name,
   placeholder,
@@ -64,3 +98,5 @@ export const InputSelectCategoriasOrCreate = ({
     </div>
   );
 };
+
+export default InputSelectCategorias;

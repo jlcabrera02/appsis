@@ -3,7 +3,8 @@ import axios from "axios";
 const user = localStorage.getItem("user");
 export const token = user ? JSON.parse(user).token : null;
 
-export const urlServer = "http://localhost:3000/";
+export const urlServer = "https://appsisserver.fly.dev/";
+// export const urlServer = "http://localhost:3000/";
 
 const server = axios.create({
   headers: {

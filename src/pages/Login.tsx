@@ -1,10 +1,16 @@
+import { useState } from "react";
 import axios from "../utils/axios";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/esm/Container";
+import Loader from "../assets/Loader";
 
 const Login = () => {
+  const [msg, setMsg] = useState({ err: "", succ: "" });
+  const [pending, setPending] = useState(false);
+
   const login = async (e: any) => {
+    setPending(true);
     try {
       e.preventDefault();
       const body = {
@@ -14,10 +20,14 @@ const Login = () => {
       const response = await axios.post("/users/login/", body);
       localStorage.setItem("user", JSON.stringify(response.data.response));
       window.location.href = "/";
-      console.log(response);
+      setMsg({ err: "", succ: "Redirigiendo a inicio" });
     } catch (err) {
-      console.log(err);
+      setMsg({ succ: "", err: "Error contraseña o usuario incorrectos" });
     }
+    setPending(false);
+    setTimeout(() => {
+      setMsg({ succ: "", err: "" });
+    }, 1500);
   };
   return (
     <Container className="m-auto w-350px p-4 bg-primary rounded">
@@ -46,7 +56,13 @@ const Login = () => {
           </FloatingLabel>
         </div>
         <div className="d-flex">
-          <button className="btn btn-secondary m-auto">Iniciar Sesión</button>
+          <button disabled={pending} className="btn btn-secondary m-auto">
+            {pending ? <Loader /> : "Iniciar Sesión"}
+          </button>
+        </div>
+        <div>
+          {msg.err && <h5 className="text-danger text-center">{msg.err}</h5>}
+          {msg.succ && <h5 className="text-success text-center">{msg.succ}</h5>}
         </div>
       </form>
     </Container>
