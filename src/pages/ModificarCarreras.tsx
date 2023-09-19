@@ -62,7 +62,7 @@ export const ModificarCarreras = () => {
 
   return (
     <div className="container">
-      <Link to="/crear/tesis" className="btn btn-primary my-3">
+      <Link to="../crear-tesis" className="btn btn-primary my-3">
         <i className="fa-solid fa-arrow-left" /> Regresar
       </Link>
       <form
