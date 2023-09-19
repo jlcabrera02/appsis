@@ -121,6 +121,11 @@ export const TableShowTesis = ({ filtros }: Props) => {
       endpoint: `/tesis/${id}`,
     })
   );
+
+  const NoData = () => {
+    return <h1 className="text-primary">Sin datos</h1>;
+  };
+
   return (
     <DataTable
       columns={columns}
@@ -129,6 +134,7 @@ export const TableShowTesis = ({ filtros }: Props) => {
       pagination
       paginationServer
       progressPending={isPending}
+      noDataComponent={<NoData />}
       paginationTotalRows={res.count}
       onChangePage={handlePage}
       onChangeRowsPerPage={handleRowsTable}
