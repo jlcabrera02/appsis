@@ -137,7 +137,7 @@ const Tesis = () => {
                 </div>
               </div>
             </div>
-            <div className="col-sm-6 col-lg-4">
+            <div className="col-sm-6 col-lg-4 overflow-x-auto">
               <div
                 className="m-auto border border-primary  mb-2"
                 style={{ maxWidth: "max-content" }}
