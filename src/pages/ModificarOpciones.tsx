@@ -62,8 +62,8 @@ export const ModificarOpciones = () => {
 
   return (
     <div className="container">
-      <Link to="/crear/tesis" className="btn btn-primary mb-3">
-        <i className="fa-solid fa-arrow-left" />
+      <Link to="../crear-tesis" className="btn btn-primary my-3">
+        <i className="fa-solid fa-arrow-left" /> Regresar
       </Link>
       <form
         onSubmit={body.id ? editar : guardar}

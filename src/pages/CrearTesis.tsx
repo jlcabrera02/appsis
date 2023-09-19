@@ -109,7 +109,7 @@ export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
   return (
     <>
       <div className="container mt-4">
-        <Form onSubmit={enviarForm}>
+        <Form onSubmit={enviarForm} className="mb-3">
           <div>
             <h4 className="fw-bold">Datos de la tesis</h4>
           </div>
