@@ -93,7 +93,7 @@ export const ModificarCategorias = () => {
               </button>
             </>
           ) : (
-            <button className="btn btn-primary">Guardar Tesis</button>
+            <button className="btn btn-primary">Guardar Categoria</button>
           )}
         </div>
       </form>

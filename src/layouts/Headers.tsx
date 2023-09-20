@@ -3,6 +3,8 @@ import Container from "react-bootstrap/esm/Container";
 import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
 import { token } from "../utils/axios";
+import tecnm from "../assets/tecnm_blanco.png";
+import itsr from "../assets/itsr.png";
 
 export const HeaderLogin = () => {
   return (
@@ -43,15 +45,17 @@ export const Header = () => {
                 </span>
               </button>
             </div>
-            <div className="row m-auto">
+            <div className="row m-auto w-100">
               <div className="col-12 ">
-                <h1 className="m-auto text-center">
+                <h1 className="m-auto text-center d-flex justify-content-between gap-3">
+                  <img src={tecnm} alt="tecnm" className="h-50px" />
                   <span className="d-none d-sm-inline-block">
                     Instituto Tecnologico Superior de los Ríos
                   </span>
                   <span className="d-sm-none fs-6">
                     Instituto Tecnologico Superior de los Rios
                   </span>
+                  <img src={itsr} alt="tecnm" className="h-50px" />
                 </h1>
               </div>
             </div>
@@ -108,8 +112,8 @@ const NavigationBar = ({ stateshow }: any) => {
               to={"/tesis"}
               className={({ isActive }) => changeColorSelect(isActive)}
             >
-              <i className="fa-solid fa-file-lines" />{" "}
-              <span className="ms-2 d-none d-sm-inline-block">Tesis</span>
+              <i className="fa-solid fa-search" />{" "}
+              <span className="ms-2 d-none d-sm-inline-block">Buscador</span>
             </NavLink>
           </li>
           {token && (
@@ -142,7 +146,7 @@ const NavigationBar = ({ stateshow }: any) => {
                     >
                       <i className="fa-solid fa-pencil" />
                       <span className="ms-2 d-none d-sm-inline-block">
-                        Crear tesis
+                        Registrar tesis
                       </span>
                     </NavLink>
                   </li>

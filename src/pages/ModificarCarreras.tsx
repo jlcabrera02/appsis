@@ -93,7 +93,7 @@ export const ModificarCarreras = () => {
               </button>
             </>
           ) : (
-            <button className="btn btn-primary">Guardar Tesis</button>
+            <button className="btn btn-primary">Guardar Carrera</button>
           )}
         </div>
       </form>
