@@ -38,7 +38,9 @@ export const TableShowTesis = ({ filtros }: Props) => {
   const { data, isPending } = useGetData({
     baseUrl: `tesis/obtener?limit=${pagination.limit}&offset=${
       pagination.offset
-    }&titulo=${filtros?.titulo ?? ""}&idcarrera=${filtros?.idcarrera ?? ""}`,
+    }&titulo=${filtros?.titulo ?? ""}&idcarrera=${
+      filtros?.idcarrera ?? ""
+    }&idcategoria=${filtros?.idcategoria ?? ""}`,
   });
   const res = data ? data["response"] : { count: 0, rows: [] };
 
