@@ -27,6 +27,7 @@ const opcionesPaginacion = {
 interface Filtros {
   titulo?: string;
   idcarrera?: string;
+  idcategoria?: string;
 }
 
 interface Props {

@@ -104,7 +104,7 @@ export const ModificarOpciones = () => {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Carrera</th>
+                <th>Opcion</th>
                 <th className="text-center">Editar</th>
                 <th className="text-center">Eliminar</th>
               </tr>

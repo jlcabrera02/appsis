@@ -170,7 +170,7 @@ export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="intitución..."
+                placeholder="institución..."
                 name="institucion"
                 onChange={handle}
                 value={tesisBody.institucion}
@@ -257,7 +257,7 @@ export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
           {tesisBody.autores.map((autor: any, index: number) => (
             <FormAutor
               key={index}
-              // autor={autor}
+              autor={autor}
               tesisBodyState={[tesisBody, setTesisBody]}
               property="autores"
               index={index}
@@ -307,6 +307,7 @@ export const CrearTesis = ({ data, setDataEdit, actualizador }: any) => {
 };
 
 interface propsAutor {
+  autor: any;
   tesisBodyState: any;
   property: string;
   index: number;
